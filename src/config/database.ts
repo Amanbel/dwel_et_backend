@@ -1,17 +1,20 @@
 import mysql from "mysql2/promise";
 
 export const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  port: Number(process.env.DB_PORT || 3306),
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "dwel_et",
+  host: process.env.MYSQLHOST || "localhost",
+  port: Number(process.env.MYSQLPORT || 3306),
+  user: process.env.MYSQLUSER || "root",
+  password: process.env.MYSQLPASSWORD || "",
+  database: process.env.MYSQLDATABASE || "dwel_et",
   waitForConnections: true,
   connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10),
   namedPlaceholders: true,
 });
 
-export const query = async <T = any>(sql: string, params: any[] | Record<string, any> = []) => {
+export const query = async <T = any>(
+  sql: string,
+  params: any[] | Record<string, any> = [],
+) => {
   const [rows] = await pool.execute(sql, params);
   return rows as T;
 };
