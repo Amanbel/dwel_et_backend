@@ -11,6 +11,16 @@ export const pool = mysql.createPool({
   namedPlaceholders: true,
 });
 
+console.log({
+  host: process.env.MYSQLHOST,
+  port: Number(process.env.MYSQLPORT),
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  url_1: process.env.DATABASE_URL,
+  url_2: process.env.MYSQL_URL,
+});
+
 export const query = async <T = any>(
   sql: string,
   params: any[] | Record<string, any> = [],
