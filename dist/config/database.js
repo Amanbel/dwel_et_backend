@@ -6,14 +6,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeDatabase = exports.query = exports.pool = void 0;
 const promise_1 = __importDefault(require("mysql2/promise"));
 exports.pool = promise_1.default.createPool({
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT || 3306),
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "dwel_et",
+    host: process.env.MYSQLHOST || "localhost",
+    port: Number(process.env.MYSQLPORT || 3306),
+    user: process.env.MYSQLUSER || "root",
+    password: process.env.MYSQLPASSWORD || "",
+    database: process.env.MYSQLDATABASE || "dwel_et",
     waitForConnections: true,
     connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10),
     namedPlaceholders: true,
+});
+console.log({
+    host: process.env.MYSQLHOST,
+    port: Number(process.env.MYSQLPORT),
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    url_1: process.env.DATABASE_URL,
+    url_2: process.env.MYSQL_URL,
 });
 const query = async (sql, params = []) => {
     const [rows] = await exports.pool.execute(sql, params);
