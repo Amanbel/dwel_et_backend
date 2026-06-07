@@ -12,7 +12,9 @@ export const ingestContent = async (req: Request, res: Response) => {
 
     res.status(200).json(result);
   } catch (error: any) {
-    console.log(error);
+    console.log(error.response?.status);
+    console.log(error.response?.data);
+
     res.status(500).json({
       message: "Processing failed",
       detail: error.message,

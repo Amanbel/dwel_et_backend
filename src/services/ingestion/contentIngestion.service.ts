@@ -8,7 +8,24 @@ Title: ${payload.title}
 
 Description: ${payload.description}
 `;
-  const classification = await classifyContent(content);
+  // const classification = await new Promise(async (resolve, reject) => {
+  //   setTimeout(async () => {
+  //     try {
+  //       const classified = await classifyContent(content);
+  //       resolve(classified);
+  //     } catch (err) {
+  //       reject(err);
+  //     }
+  //   });
+  // }).catch((err) => {
+  //   throw new Error(err);
+  // });
+
+  const classification: any = await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      classifyContent(content).then(resolve).catch(reject);
+    }, 5000);
+  });
 
   const impact = calculateImpact(classification);
 
