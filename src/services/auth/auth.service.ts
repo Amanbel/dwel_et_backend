@@ -6,7 +6,11 @@ import {
 
 import { hashPassword, comparePassword } from "./password.service";
 
-import { createAccessToken, createRefreshToken, verifyRefreshToken } from "./jwt.service";
+import {
+  createAccessToken,
+  createRefreshToken,
+  verifyRefreshToken,
+} from "./jwt.service";
 
 export const registerUser = async (
   name: string,
@@ -38,7 +42,7 @@ export const loginUser = async (email: string, password: string) => {
   if (!valid) throw new Error("Invalid credentials");
 
   return {
-    accessToken: createAccessToken(user.id),
+    accessToken: createAccessToken(user),
 
     refreshToken: createRefreshToken(user.id),
 

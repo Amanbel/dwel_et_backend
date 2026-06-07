@@ -1,11 +1,16 @@
 import jwt from "jsonwebtoken";
+import { DbUser } from "../../repositories/user.repository";
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET || "dwel-dev-access-secret";
 
 const REFRESH_SECRET = process.env.REFRESH_SECRET || "dwel-dev-refresh-secret";
 
-export const createAccessToken = (userId: string) => {
-  return jwt.sign({ userId }, ACCESS_SECRET, { expiresIn: "15m" });
+// export const createAccessToken = (userId: string) => {
+//   return jwt.sign({ userId }, ACCESS_SECRET, { expiresIn: "15m" });
+// };
+
+export const createAccessToken = (user: DbUser) => {
+  return jwt.sign(user, ACCESS_SECRET, { expiresIn: "15m" });
 };
 
 export const createRefreshToken = (userId: string) => {
