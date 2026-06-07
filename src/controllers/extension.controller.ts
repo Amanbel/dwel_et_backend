@@ -3,6 +3,7 @@ import { processContent } from "../services/ingestion/contentIngestion.service";
 
 export const ingestContent = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const result = await processContent({
       ...req.body,
       user: (req as any).user,
