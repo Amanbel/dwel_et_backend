@@ -22,13 +22,17 @@ export const authenticate = (
     const decoded = verifyAccessToken(token);
 
     console.log(decoded);
+
     const { id, ...rest } = decoded as DbUser;
     (req as any).user = { ...rest, userId: id };
 
     next();
-  } catch {
+  } catch (err) {
+    console.log(err);
     return res.status(401).json({
       message: "Invalid token",
     });
+  } finally {
+    console.log(new Date().toLocaleDateString());
   }
 };
