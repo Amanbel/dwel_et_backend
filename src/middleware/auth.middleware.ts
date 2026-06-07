@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { verifyAccessToken } from "../services/auth/jwt.service";
+import { DbUser } from "../repositories/user.repository";
 
 export const authenticate = (
   req: Request,
@@ -21,7 +22,8 @@ export const authenticate = (
     const decoded = verifyAccessToken(token);
 
     console.log(decoded);
-    (req as any).user = decoded;
+    const { id, ...rest } = decoded as DbUser;
+    (req as any).user = { ...rest, userId: id };
 
     next();
   } catch {

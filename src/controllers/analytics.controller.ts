@@ -3,7 +3,10 @@ import { Request, Response } from "express";
 import { getDashboardData } from "../services/analytics/dashboard.service";
 import { getCategoryExposure } from "../services/analytics/categoryAnalytics.service";
 import { getEmotionTrends } from "../services/analytics/emotionAnalytics.service";
-import { getAppImpacts, getInsights } from "../services/analytics/usageAnalytics.service";
+import {
+  getAppImpacts,
+  getInsights,
+} from "../services/analytics/usageAnalytics.service";
 import { findContentEvents } from "../repositories/content.repository";
 
 export const dashboard = async (req: Request, res: Response) => {
@@ -32,7 +35,11 @@ export const insights = async (req: Request, res: Response) => {
 
 export const sessions = async (req: Request, res: Response) => {
   const userId = (req as any).user.userId;
-  const days = req.query.dateRange === "Last 30 Days" || req.query.dateRange === "This Month" ? 30 : 7;
+  const days =
+    req.query.dateRange === "Last 30 Days" ||
+    req.query.dateRange === "This Month"
+      ? 30
+      : 7;
   let events = await findContentEvents(userId, days);
 
   const application = req.query.application?.toString();
@@ -40,11 +47,17 @@ export const sessions = async (req: Request, res: Response) => {
   const sentiment = req.query.sentiment?.toString();
 
   if (application && application !== "All Apps") {
-    events = events.filter((event) => event.platform?.toLowerCase() === application.toLowerCase());
+    events = events.filter(
+      (event) => event.platform?.toLowerCase() === application.toLowerCase(),
+    );
   }
 
   if (category && category !== "All Categories") {
-    events = events.filter((event) => parseJsonArray(event.topics).some((topic) => topic.toLowerCase() === category.toLowerCase()));
+    events = events.filter((event) =>
+      parseJsonArray(event.topics).some(
+        (topic) => topic.toLowerCase() === category.toLowerCase(),
+      ),
+    );
   }
 
   const mapped = events.map(mapSession);
@@ -58,14 +71,26 @@ export const sessions = async (req: Request, res: Response) => {
 
 const mapSession = (event: any) => {
   const topics = parseJsonArray(event.topics);
-  const sentiment = normalizeSentiment(event.sentiment, Number(event.wellbeing_score || 0));
+  const sentiment = normalizeSentiment(
+    event.sentiment,
+    Number(event.wellbeing_score || 0),
+  );
   return {
     id: event.id,
     timestamp: new Date(event.created_at).toISOString(),
     appName: event.platform || "Unknown",
     icon: platformIcon(event.platform),
-    iconColor: sentiment === "Negative" ? "text-error" : sentiment === "Positive" ? "text-tertiary" : "text-primary",
-    context: event.title || event.description || event.url || "Tracked social content session",
+    iconColor:
+      sentiment === "Negative"
+        ? "text-error"
+        : sentiment === "Positive"
+          ? "text-tertiary"
+          : "text-primary",
+    context:
+      event.title ||
+      event.description ||
+      event.url ||
+      "Tracked social content session",
     category: topics[0] || "Uncategorized",
     sentiment,
     impactScore: Math.round(Number(event.wellbeing_score || 0)),
