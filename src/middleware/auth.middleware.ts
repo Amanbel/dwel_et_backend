@@ -20,6 +20,7 @@ export const authenticate = (
   try {
     const decoded = verifyAccessToken(token);
 
+    console.log(decoded);
     (req as any).user = decoded;
 
     next();
